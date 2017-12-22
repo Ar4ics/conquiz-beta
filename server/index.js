@@ -24,7 +24,6 @@ var Game = require('./src/models/Game');
 var User = require('./src/models/User');
 
 app.get('/seed', async function (req, res) {
-
   await Game.remove({});
   await User.remove({});
   await Question.clearAndFillByCount(1000);

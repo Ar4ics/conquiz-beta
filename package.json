@@ -6,9 +6,13 @@
   "scripts": {
     "web": "cd client && npm run web",
     "build": "cd client && npm run build",
-    "server": "cd server && npm start"
+    "server": "cd server && npm start",
+    "postinstall": "cd server && npm install"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": ">=9"
+  }
 }
