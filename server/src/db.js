@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const mongoDB = MONGOLAB_URI || 'mongodb://127.0.0.1/conquiz';
+const mongoDB = process.env.MONGOLAB_URI || 'mongodb://127.0.0.1/conquiz';
 mongoose.connect(mongoDB, {
   useMongoClient: true
 });
