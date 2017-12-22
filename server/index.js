@@ -22,10 +22,10 @@ var Question = require('./src/models/Question');
 var Game = require('./src/models/Game');
 var User = require('./src/models/User');
 
-app.get('/seed', async function (req, res) {
+app.get('/seed/:number', async function (req, res) {
   await Game.remove({});
   await User.remove({});
-  await Question.clearAndFillByCount(1000);
+  await Question.clearAndFillByCount(req.params.number);
   res.send('cleared');
 });
 
