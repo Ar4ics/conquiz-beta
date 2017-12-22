@@ -14,14 +14,14 @@ module.exports.addBox = async (user, game, x, y) => {
 
   if (!user.base.has) {
     msg.base = true;
+    msg.shields = user.base.shields;
     await user.setBase(box._id);
   } else {
     msg.base = false;
+    msg.shields = 0;
     user.box = box._id;
     await user.save();
   }
-
-  msg.name = user.name;
   msg.color = user.color;
 
   return { msg, game };

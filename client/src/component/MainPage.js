@@ -4,10 +4,10 @@ import SearchGame from '../containers/SearchGame';
 class MainPage extends Component {
   constructor(props) {
     super(props);
-    let host = location.origin.replace(/^http/, 'ws')
+    let host = location.origin.replace(/^http/, 'ws');
+    //let host = 'ws://localhost:3000';
     this.props.connect(host);
   }
-
   render() {
     const {
       live,

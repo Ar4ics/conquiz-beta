@@ -118,9 +118,8 @@ const Box = props => {
   return (
     <TouchableWithoutFeedback onPress={_onClick}>
       <View style={[styles.box, _getStyle(props.box)]}>
-        <Text>{props.box.user.name}</Text>
-        <Text>{props.box.base && 'База'}</Text>
-        <Text>{props.box.common && 'Атака'}</Text>
+        {props.box.base && <Text>База ({props.box.shields})</Text>}
+        {props.box.common && <Text>Атака</Text>}
       </View>
     </TouchableWithoutFeedback>
   );

@@ -43,12 +43,13 @@ export default function game(state = initialState, action) {
         });
       } else if (box) {
         var localUser = boxes[box.y][box.x].user;
-        if (!localUser.name) {
+        if (localUser.color === 'white') {
           boxes[box.y][box.x] =
-            { user: box.user, base: box.base, common: false };
+            { user: box.user, base: box.base, shields: box.shields, common: false };
         } else {
-          if (box.user.name === localUser.name) {
+          if (box.user.color === localUser.color) {
             boxes[box.y][box.x].common = false;
+            boxes[box.y][box.x].shields = box.shields;
           } else {
             boxes[box.y][box.x] =
               { user: box.user, base: false, common: false };
@@ -73,9 +74,8 @@ export default function game(state = initialState, action) {
       var boxes = state.boxes.slice();
       boxes[action.data.box.y][action.data.box.x] = {
         user: {
-          name: action.data.box.name,
           color: action.data.box.color
-        }, base: action.data.box.base
+        }, base: action.data.box.base, shields: action.data.box.shields
       };
       return Object.assign({}, state,
         {

@@ -48,7 +48,7 @@ export default class QuestionForm extends Component {
             {results.users.map((user, i) =>
               <View key={i}>
                 <Text>
-                  Игрок {user.name} выбрал {user.variant} вариант: {user.correct ? 'верно' : 'неверно'}
+                  Игрок {user.name} выбрал {user.variant + 1} вариант: {user.correct ? 'верно' : 'неверно'}
                 </Text>
                 <Text>Время ответа: {user.time / 1000.0} с.</Text>
               </View>

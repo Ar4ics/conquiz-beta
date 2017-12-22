@@ -95,7 +95,6 @@ module.exports = (wss, isOpen) => {
               }
 
             }
-            console.log(targetClients.map(c => c.player.db));
             if (found && (targetClients.length === targetClients[0].player.db.count)) {
               var players = targetClients.map(c => c.player.db);
               var game = await createNewGame(targetClients, players);

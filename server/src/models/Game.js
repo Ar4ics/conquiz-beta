@@ -78,7 +78,7 @@ Game.statics.createGame = async function (users, x, y) {
 Game.statics.getGame = async function (id) {
   var game = await this.findById(id)
     .populate('users', 'name score color base -_id')
-    .populate('boxes.user', 'name color -_id')
+    .populate('boxes.user', 'color -_id')
     .populate('question.current', 'title answers -_id')
     .populate('winner', 'name -_id')
     .exec();
@@ -102,6 +102,7 @@ Game.statics.getGame = async function (id) {
     if (user.base.has) {
       var box = game.boxes.find(b => (b._id.equals(user.base.box)));
       field[box.y][box.x].base = true;
+      field[box.y][box.x].shields = user.base.shields;
     }
   });
 
@@ -315,12 +316,9 @@ Game.methods.getCompetitorsAnswersResults = async function (competitors) {
     users: []
   }
 
-  console.log('c', competitors);
 
   var winner = competitors.find(c => c.question.variant === question.correct);
 
-  console.log('w', winner);
-  console.log('b', this.box.competitors);
   var base = false;
   if (this.stage === 2) {
     if (winner) {
@@ -331,17 +329,24 @@ Game.methods.getCompetitorsAnswersResults = async function (competitors) {
         base = true;
       }
     } else {
-      winner = { name: '', color: 'white' };
+      winner = { name: '', color: 'white', base: { shields: 0 } };
     }
   } else {
     if (winner && winner._id.equals(this.box.competitors[0])) {
       var box = this.boxes.find(b => (b.x === this.box.common.x && b.y === this.box.common.y));
       var lostUser = competitors.find(c => c._id.equals(this.box.competitors[1]));
       if (box._id.equals(lostUser.base.box)) {
-        console.log('lost user', box.user);
-        lostUser.base.has = false;
+        lostUser.base.shields--;
+
+        if (lostUser.base.shields === 0) {
+          lostUser.base.has = false;
+          box.user = winner._id;
+        } else {
+          winner = lostUser;
+        }
+      } else {
+        box.user = winner._id;
       }
-      box.user = winner._id;
 
     } else {
       winner = competitors.find(c => c._id.equals(this.box.competitors[1]));
@@ -350,11 +355,9 @@ Game.methods.getCompetitorsAnswersResults = async function (competitors) {
 
   results.box = {
     user: { name: winner.name, color: winner.color },
-    base,
+    base, shields: winner.base.shields,
     x: this.box.common.x, y: this.box.common.y
   };
-
-
 
   competitors.forEach(async function (user) {
 

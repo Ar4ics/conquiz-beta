@@ -20,6 +20,10 @@ var User = new Schema({
     has: {
       type: Boolean,
       default: false
+    },
+    shields: {
+      type: Number, 
+      default: 3
     }
   },
   question: {
@@ -36,13 +40,16 @@ var User = new Schema({
 
 
 User.methods.setBase = async function (box_id) {
-  this.base = { box: box_id, has: true };
+  this.base.box = box_id;
+  this.base.has = true;
   this.box = box_id;
   await this.save();
 }
 
 User.methods.setAnswer = async function (answer) {
-  this.question = { variant: answer, answered: true, end: Date.now() };
+  this.question.variant = answer;
+  this.question.answered = true; 
+  this.question.end = Date.now();
   await this.save();
 }
 
