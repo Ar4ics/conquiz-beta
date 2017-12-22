@@ -23,13 +23,15 @@ Question.statics.getRandomQuestion = async function () {
 Question.statics.clearAndFillByCount = async function (n) {
   await this.remove({});
   var qs = require('../questions.json').slice(0, n);
+  var questions = [];
   for (q of qs) {
     var correct_answer = q.answers[0];
     shuffleArray(q.answers);
     q.correct = q.answers.indexOf(correct_answer);
-    var newQ = new this(q);
-    await newQ.save();
+    questions.push(q);
   }
+
+  await this.insertMany(questions);
 }
 
 Question.statics.getRandomQuestionNotInHistory = async function (history) {
