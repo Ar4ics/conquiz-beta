@@ -81,21 +81,22 @@ module.exports.getUserGame = async (player, game) => {
 
 }
 
-module.exports.createNewGame = async (clients, players) => {
+
+module.exports.createNewGame = async (players) => {
   var users = await User.insertMany(players);
   var game = await Game.createGame(users, players[0].x, players[0].y);
-  for (let index = 0; index < users.length; index++) {
-    clients[index].player.db = users[index];
-    clients[index].player.game_id = game._id;
-  }
-
   return game;
 }
 
-module.exports.getClientsFromGame = (clients, game) => {
+module.exports.getClientsFromGame = (clients, game_uid) => {
+  var target = [];
 
-  return Object.values(clients).filter(function (c) {
-    return game._id.equals(c.player.game_id)
-  });
+  for (let client of clients) {
+    if (client.game_uid === game_uid) {
+      target.push(client);
+    }
+  }
 
+  return target;
+  
 }

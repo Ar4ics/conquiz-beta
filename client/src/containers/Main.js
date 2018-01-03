@@ -1,6 +1,6 @@
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import MainPage from "../component/MainPage"
+import MainPage from "../components/MainPage"
 import * as socket from '../actions/socket'
 
 function mapDispatchToProps(dispatch) {

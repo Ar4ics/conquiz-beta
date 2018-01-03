@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextInput, View, Button, StyleSheet, Text, ActivityIndicator } from 'react-native';
+import { TextInput, View, TouchableOpacity, StyleSheet, Text, ActivityIndicator } from 'react-native';
 
 export default class QuestionForm extends Component {
   constructor(props) {
@@ -10,13 +10,17 @@ export default class QuestionForm extends Component {
     this.props.answerToQuestion({ answer: i });
   }
 
-  _getButtonColor(i) {
+  _getColor(i) {
     if (this.props.results) {
       if (this.props.results.answer === i) {
-        return 'green';
+        return {
+          backgroundColor: 'green'
+        }
       }
     }
-    return 'deepskyblue';
+    return {
+      backgroundColor: 'white'
+    };
   }
 
   render() {
@@ -31,15 +35,17 @@ export default class QuestionForm extends Component {
     }
     return (
       <View style={styles.container}>
-        <Text>
+        <Text style={{ textAlign: 'justify', width: 150 }}>
           {question.title}
         </Text>
-        <View style={styles.row}>
+        <View>
           {question.answers.map((answer, i) =>
-            <Button key={i}
-              color={this._getButtonColor(i)}
-              onPress={this._onPressButton.bind(this, i)}
-              title={answer} />
+            <View key={i} style={[{margin: 10, borderWidth: 1}, this._getColor(i)]}>
+              <TouchableOpacity
+                onPress={this._onPressButton.bind(this, i)}>
+                <Text style={{ textAlign: 'center' }}>{answer}</Text>
+              </TouchableOpacity>
+            </View>
           )}
         </View>
 
@@ -66,9 +72,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignSelf: 'center',
-    alignItems: 'stretch',
-
+    alignItems: 'center',
+    width: 150,
   },
+
   row: {
     flexDirection: 'row',
     alignSelf: 'center',

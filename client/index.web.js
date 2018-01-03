@@ -11,13 +11,13 @@ const renderApp = () => (
   </AppContainer>
 );
 
-AppRegistry.registerComponent('ReactNativeWebBoilerplate', () => renderApp);
+AppRegistry.registerComponent('App', () => renderApp);
 
 if (module.hot) {
   module.hot.accept();
-  AppRegistry.registerComponent('ReactNativeWebBoilerplate', () => App);
+  AppRegistry.registerComponent('App', () => App);
 }
 
-AppRegistry.runApplication('ReactNativeWebBoilerplate', {
+AppRegistry.runApplication('App', {
   rootTag: document.getElementById('root'),
 });

@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Launch Program",
       "cwd": "${workspaceFolder}/server",
-      "program": "${workspaceFolder}/server/app.js"
+      "program": "${workspaceFolder}/server/index.js"
     },
   ]
 }

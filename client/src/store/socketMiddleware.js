@@ -1,5 +1,7 @@
 import * as actions from '../actions/socket';
 import * as game from '../actions/game';
+import * as user from '../actions/user';
+
 const socketMiddleware = (function () {
   var socket = null;
 
@@ -44,13 +46,19 @@ const socketMiddleware = (function () {
       case game.ANSWER_RESULTS:
         store.dispatch(game.answersResultsReceived(msg));
         break;
-      case game.NEW_GAME:
+      case game.GAME:
         //Dispatch an action that adds the received message to our state
-        store.dispatch(game.newGameFound(msg));
+        store.dispatch(game.gameReceived(msg));
         break;
-      case game.EXISTING_GAME:
+      case game.GAME_FOUND:
         //Dispatch an action that adds the received message to our state
-        store.dispatch(game.existingGameFound(msg));
+        store.dispatch(game.gameFound(msg));
+        break;
+      case user.CURRENT_GAMES:
+        store.dispatch(user.currentGames(msg));
+        break;
+      case user.GAME_CREATED:
+        store.dispatch(user.gameCreated(msg));
         break;
       case actions.GAME_ERROR:
         //Dispatch an action that adds the received message to our state

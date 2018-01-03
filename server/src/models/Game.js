@@ -109,7 +109,6 @@ Game.statics.getGame = async function (id) {
   var mover = await User.findById(game.move.order[game.move.index], 'name -_id').exec();
 
   return {
-    _id: game._id,
     boxes: field,
     mover,
     winner: game.winner,

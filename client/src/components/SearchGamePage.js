@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { TextInput, View, Button, Text } from 'react-native';
 import Game from '../containers/Game';
-import GameForm from './GameForm';
+import GameForm from '../containers/GameForm';
+import Games from '../containers/Games';
 export default class SearchGamePage extends Component {
   constructor(props) {
     super(props);
@@ -9,12 +10,21 @@ export default class SearchGamePage extends Component {
   }
 
   render() {
+    const {
+      loading,
+      loaded,
+    } = this.props;
     return (
       <View>
-        {!this.props.loading &&
-          (this.props.loaded ? <Game /> :
-            <GameForm searchGame={this.props.searchGame} />)
+        {!loading &&
+          (loaded ? <Game /> :
+            <View>
+              <GameForm />
+              <Games />
+            </View>
+          )
         }
+
       </View>
 
     );

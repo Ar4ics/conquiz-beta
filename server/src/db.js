@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 
 const mongoDB = process.env.MONGOLAB_URI || 'mongodb://127.0.0.1/conquiz';
-mongoose.connect(mongoDB, {
-  useMongoClient: true
-});
+mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 
 const db = mongoose.connection;

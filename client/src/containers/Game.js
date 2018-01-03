@@ -1,6 +1,6 @@
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import GamePage from "../component/GamePage"
+import GamePage from "../components/GamePage"
 import * as game from '../actions/game'
 
 function mapDispatchToProps(dispatch) {
@@ -10,7 +10,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
   return {
     boxes: state.game.boxes,
-    player: state.game.player,
+    player: state.user.player,
     mover: state.game.mover,
     question: state.game.question,
     results: state.game.results,

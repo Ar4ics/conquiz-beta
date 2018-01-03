@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Alert, Button, Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import SearchGame from '../containers/SearchGame';
-class MainPage extends Component {
+
+export default class MainPage extends Component {
   constructor(props) {
     super(props);
     let host = location.origin.replace(/^http/, 'ws');
@@ -11,13 +12,11 @@ class MainPage extends Component {
   render() {
     const {
       live,
-      status,
       failure,
     } = this.props;
     return (
       <View>
-        <Text>Статус связи с сервером: {status}</Text>
-        {failure && <Text>Возникла ошибка: {failure}</Text>}
+        {failure && <Text>{failure}</Text>}
         {live && <SearchGame />}
       </View>
     );
@@ -26,5 +25,3 @@ class MainPage extends Component {
 
 const styles = StyleSheet.create({
 });
-
-export default MainPage

@@ -10,6 +10,7 @@ const initialState = {
   loading: false,
   loaded: false,
   winner: null,
+  searching_users: []
 };
 
 export default function game(state = initialState, action) {
@@ -106,7 +107,7 @@ export default function game(state = initialState, action) {
         });
 
 
-    case actions.GAME_FOUND:
+    case actions.GAME:
       console.log(action);
       return Object.assign({}, state,
         {
@@ -115,7 +116,6 @@ export default function game(state = initialState, action) {
           mover: action.data.game.mover,
           question: action.data.game.question,
           winner: action.data.game.winner,
-          player: action.data.player,
           loading: false,
           loaded: true
         });
@@ -124,6 +124,13 @@ export default function game(state = initialState, action) {
       return Object.assign({}, state,
         {
           winner: action.data.winner
+        });
+
+    case actions.SEARCHING_USERS:
+      console.log(action);
+      return Object.assign({}, state,
+        {
+          searching_users: action.data.searching_users
         });
 
     default:

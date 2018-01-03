@@ -1,6 +1,6 @@
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import SearchGamePage from "../component/SearchGamePage"
+import SearchGamePage from "../components/SearchGamePage"
 import * as game from '../actions/game'
 
 function mapDispatchToProps(dispatch) {

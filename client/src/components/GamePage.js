@@ -30,10 +30,10 @@ class GamePage extends Component {
       <View style={styles.container}>
 
         <View style={styles.onerow}>
-          <Text>Вы: {player.name}</Text>
+          <Text>{player.name}</Text>
           <TouchableWithoutFeedback onPress={() => this.props.exitGame()}>
             <View>
-              <Text>Выйти</Text>
+              <Text>Выйти из игры</Text>
             </View>
           </TouchableWithoutFeedback>
         </View>

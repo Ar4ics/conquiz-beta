@@ -1,19 +1,18 @@
 import { AsyncStorage } from 'react-native';
-import { sendMessage } from './socket'
+import { sendMessage, gameError } from './socket'
+import { leaveGame, CURRENT_GAMES } from './user'
 
 export const BOX_CLICKED = 'BOX_CLICKED';
 export const GET_GAME = 'GET_GAME';
-export const NEW_GAME = 'NEW_GAME';
-export const EXISTING_GAME = 'EXISTING_GAME';
-export const GAME_FOUND = 'GAME_FOUND';
 export const GAME_NOT_FOUND = 'GAME_NOT_FOUND';
-export const SEARCH_GAME = 'SEARCH_GAME';
 export const NEW_QUESTION = 'NEW_QUESTION';
 export const USER_ANSWERED = 'USER_ANSWERED';
 export const ANSWER_RESULTS = 'ANSWER_RESULTS';
 export const CLEAR_RESULTS = 'CLEAR_RESULTS';
 export const COMMON_BOX_CLICKED = 'COMMON_BOX_CLICKED';
 export const GAME_OVER = 'GAME_OVER';
+export const GAME = 'GAME';
+export const GAME_FOUND = 'GAME_FOUND';
 
 export function boxClickSend(box) {
   return (dispatch) => {
@@ -58,6 +57,7 @@ export function clearResults() {
   }
 }
 
+
 export function gameFinished(data) {
   return {
     type: GAME_OVER,
@@ -65,10 +65,10 @@ export function gameFinished(data) {
   }
 }
 
-
 export function exitGame() {
   return async (dispatch) => {
     try {
+      dispatch(leaveGame());
       await AsyncStorage.removeItem('game');
       dispatch({
         type: GAME_NOT_FOUND
@@ -79,12 +79,6 @@ export function exitGame() {
   }
 }
 
-export function searchGame(user) {
-  return (dispatch) => {
-    user.type = SEARCH_GAME;
-    dispatch(sendMessage(user));
-  }
-}
 
 export function answerToQuestion(q) {
   return (dispatch) => {
@@ -107,7 +101,7 @@ export function getGame(game) {
 export function tryGetGame() {
   return async (dispatch) => {
     try {
-      const game = await AsyncStorage.getItem('game');
+      let game = await AsyncStorage.getItem('game');
       if (game) {
         console.log('local.game', game);
         dispatch(getGame(JSON.parse(game)));
@@ -123,26 +117,24 @@ export function tryGetGame() {
   }
 }
 
-export function existingGameFound(data) {
+export function gameReceived(data) {
   return {
-    type: GAME_FOUND,
+    type: GAME,
     data
   }
 }
 
-export function newGameFound(data) {
-  return async (dispatch) => {
+export function gameFound(data) {
+  return async (dispatch, getState) => {
     try {
       await AsyncStorage.setItem('game',
         JSON.stringify({
-          game: data.game._id, player: data.player._id
+          game_uid: getState().user.game.uid, player_id: data.player_id,
         }));
-      dispatch(existingGameFound(data));
+      dispatch(getGame({}));
 
     } catch (error) {
       console.log('error saving data', error);
     }
   }
-
 }
-

@@ -12,13 +12,13 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
-    "mongoose": "^4.13.7",
+    "mongoose": "^5.0.0-rc0",
     "uuid": "^3.1.0",
-    "ws": "3.3.2",
+    "ws": "^3.3.3",
     "bufferutil": "^3.0.3",
     "utf-8-validate": "^4.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.13.3"
+    "nodemon": "^1.14.7"
   }
 }
