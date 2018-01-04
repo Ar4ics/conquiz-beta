@@ -3,6 +3,7 @@ var Game = require('./models/Game');
 var User = require('./models/User');
 var { addBox, setCommonBox, answerToQuestion, getUserGame, getClientsFromGame, createNewGame } = require('./controllers/GameController');
 var { generateColor } = require('./helpers/generators');
+
 const BOX_CLICKED = 'BOX_CLICKED';
 const COMMON_BOX_CLICKED = 'COMMON_BOX_CLICKED';
 const GET_GAME = 'GET_GAME';
@@ -18,6 +19,9 @@ const NEW_QUESTION = 'NEW_QUESTION';
 const USER_ANSWERED = 'USER_ANSWERED';
 const ANSWER_RESULTS = 'ANSWER_RESULTS';
 const GAME_CREATED = 'GAME_CREATED';
+const GAME_NOT_FOUND = 'GAME_NOT_FOUND';
+const CONNECTED_CLIENTS = 'CONNECTED_CLIENTS';
+
 module.exports = (wss, isOpen) => {
 
   broadcast = (clients, data) => {
@@ -30,9 +34,24 @@ module.exports = (wss, isOpen) => {
 
   var games = {};
 
+  const interval = setInterval(() => {
+    wss.clients.forEach(ws => {
+      if (ws.isAlive === false) return ws.terminate();
+      ws.isAlive = false;
+      ws.ping('', false, true);
+      console.log('ping');
+    });
+  }, 10000);
+
   wss.on('connection', (ws) => {
     console.log('client connected');
     ws.uid = uuidv4();
+    ws.isAlive = true;
+    ws.on('pong', () => {
+      ws.isAlive = true;
+      console.log('pong');
+    });
+
     ws.on('message', async (message) => {
       try {
         console.log('message', message);
@@ -44,23 +63,21 @@ module.exports = (wss, isOpen) => {
               ws.send(JSON.stringify({ game: dbGame, type: GAME }));
             } else {
               var game = games[msg.game_uid];
-              if (!game || !game.id) {
-                throw new Error('игра не найдена');
-              }
               var player = await User.findById(msg.player_id).exec();
-              if (!player) {
-                throw new Error('игрок не найден');
+              if (!game || !game.id || !player) {
+                ws.send(JSON.stringify({ type: GAME_NOT_FOUND }));
+                return;
               }
               ws.name = player.name;
+              var found = game.users.find(u => u.name === ws.name);
+              if (found) {
+                throw new Error('обнаружен мультилогин от игрока ' + ws.name);
+              }
               var user = {
                 uid: ws.uid,
                 name: ws.name,
-                color: generateColor()
+                color: player.color
               };
-              var found = game.users.find(u => u.name === user.name);
-              if (found) {
-                throw new Error('обнаружен мультилогин от игрока ' + user.name);
-              }
               ws.game_uid = msg.game_uid;
               ws.game_id = game.id;
               ws.id = msg.player_id;
@@ -78,6 +95,11 @@ module.exports = (wss, isOpen) => {
           case CURRENT_GAMES:
             console.log(games);
             ws.send(JSON.stringify({ games, type: CURRENT_GAMES }));
+            break;
+
+          case CONNECTED_CLIENTS:
+            broadcast(wss.clients, { count: wss.clients.size, type: CONNECTED_CLIENTS });
+
             break;
 
           case CREATE_GAME:
@@ -117,7 +139,7 @@ module.exports = (wss, isOpen) => {
                 ws.game_uid = game_uid;
                 game.users.push(user);
                 if (game.users.length === game.count) {
-                  var dbGame = await createNewGame(game.users);
+                  var dbGame = await createNewGame(game);
                   game.id = dbGame._id;
                   var clients = getClientsFromGame(wss.clients, game_uid);
                   for (let index = 0; index < clients.length; index++) {
@@ -235,6 +257,7 @@ module.exports = (wss, isOpen) => {
         console.log(games);
         broadcast(wss.clients, { games, type: CURRENT_GAMES });
       }
+      broadcast(wss.clients, { count: wss.clients.size, type: CONNECTED_CLIENTS });
     });
   });
 }

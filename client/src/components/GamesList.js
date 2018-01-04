@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextInput, View, Button, StyleSheet, Text, TouchableHighlight } from 'react-native';
+import { TextInput, View, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 export default class GamesList extends Component {
   constructor(props) {
@@ -7,17 +7,22 @@ export default class GamesList extends Component {
     if (Object.keys(this.props.games).length === 0) {
       this.props.getGames();
     }
+    this.props.getClients();
   }
 
   render() {
     const {
       games,
       game,
-      player
+      player,
+      clients
     } = this.props;
     return (
       <View style={styles.container}>
-        <Text style={styles.onecol}>Всего игр: {Object.keys(games).length}</Text>
+        <View style={styles.row}>
+          <Text>Игры: {Object.keys(games).length}</Text>
+          <Text>Подключено: {clients}</Text>
+        </View>
         {Object.keys(games).map((uid, i) =>
           <View style={styles.game} key={uid}>
             <Text style={styles.onecol}>
@@ -34,14 +39,14 @@ export default class GamesList extends Component {
             {player &&
               <View style={styles.onecol}>
                 {!game && !games[uid].id &&
-                  <TouchableHighlight onPress={() => this.props.joinGame({ uid, name: player.name })}>
+                  <TouchableOpacity onPress={() => this.props.joinGame({ uid, name: player.name })}>
                     <Text>Войти</Text>
-                  </TouchableHighlight>
+                  </TouchableOpacity>
                 }
                 {game && game.uid === uid &&
-                  <TouchableHighlight onPress={() => this.props.leaveGame()}>
+                  <TouchableOpacity onPress={() => this.props.leaveGame()}>
                     <Text>Выйти</Text>
-                  </TouchableHighlight>
+                  </TouchableOpacity>
                 }
               </View>
             }
@@ -59,14 +64,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     alignItems: 'stretch',
-    margin: 5,
+    marginTop: 5,
+    minWidth: 200,
+
   },
 
   game: {
     borderWidth: 1,
     padding: 5,
-    margin: 5,
-    minWidth: 200
+    marginTop: 5,
   },
 
   onecol: {
@@ -79,7 +85,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-
   },
 
 });

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import QuestionForm from './QuestionForm';
 import UsersList from './UsersList';
 
@@ -31,16 +31,16 @@ class GamePage extends Component {
 
         <View style={styles.onerow}>
           <Text>{player.name}</Text>
-          <TouchableWithoutFeedback onPress={() => this.props.exitGame()}>
+          <TouchableOpacity onPress={() => this.props.exitGame()}>
             <View>
               <Text>Выйти из игры</Text>
             </View>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
         </View>
 
         <UsersList users={users} />
 
-        <View style={{ paddingTop: 5 }}>
+        <View style={{ marginTop: 5 }}>
           {question ?
             <QuestionForm
               question={question}
@@ -53,15 +53,17 @@ class GamePage extends Component {
           }
         </View>
 
-        <View style={styles.field}>
-          {boxes.map((y, j) =>
-            <View style={styles.row} key={j}>
-              {boxes[j].map((x, i) =>
-                <Box key={i} onBoxClick={this._onPressBox} x={i} y={j} box={x} />
-              )}
-            </View>
-          )}
-        </View>
+        {!results &&
+          <View style={styles.field}>
+            {boxes.map((y, j) =>
+              <View style={styles.row} key={j}>
+                {boxes[j].map((x, i) =>
+                  <Box key={i} onBoxClick={this._onPressBox} x={i} y={j} box={x} />
+                )}
+              </View>
+            )}
+          </View>
+        }
       </View>
     );
 
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
 
   },
   field: {
-    paddingTop: 10,
+    marginTop: 5,
   },
   row: {
     flex: 1,
@@ -89,6 +91,7 @@ const styles = StyleSheet.create({
 
   },
   onerow: {
+    marginTop: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -116,12 +119,12 @@ const Box = props => {
     }
   }
   return (
-    <TouchableWithoutFeedback onPress={_onClick}>
+    <TouchableOpacity onPress={_onClick}>
       <View style={[styles.box, _getStyle(props.box)]}>
         {props.box.base && <Text>База ({props.box.shields})</Text>}
         {props.box.common && <Text>Атака</Text>}
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 
 };

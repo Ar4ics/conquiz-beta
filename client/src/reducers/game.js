@@ -3,14 +3,12 @@ import * as actions from "../actions/game";
 const initialState = {
   boxes: [],
   users: [],
-  player: null,
   mover: null,
   question: null,
   results: null,
   loading: false,
   loaded: false,
   winner: null,
-  searching_users: []
 };
 
 export default function game(state = initialState, action) {
@@ -124,13 +122,6 @@ export default function game(state = initialState, action) {
       return Object.assign({}, state,
         {
           winner: action.data.winner
-        });
-
-    case actions.SEARCHING_USERS:
-      console.log(action);
-      return Object.assign({}, state,
-        {
-          searching_users: action.data.searching_users
         });
 
     default:

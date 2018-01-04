@@ -82,10 +82,10 @@ module.exports.getUserGame = async (player, game) => {
 }
 
 
-module.exports.createNewGame = async (players) => {
-  var users = await User.insertMany(players);
-  var game = await Game.createGame(users, players[0].x, players[0].y);
-  return game;
+module.exports.createNewGame = async (game) => {
+  var users = await User.insertMany(game.users);
+  var dbGame = await Game.createGame(users, game.x, game.y);
+  return dbGame;
 }
 
 module.exports.getClientsFromGame = (clients, game_uid) => {

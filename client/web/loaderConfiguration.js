@@ -13,7 +13,7 @@ const babelLoaderConfiguration = {
       cacheDirectory: true,
       // This aliases 'react-native' to 'react-native-web' and includes only
       // the modules needed by the app
-      plugins: ['react-native-web', 'transform-runtime'],
+      plugins: ['react-native-web', 'transform-runtime', 'transform-remove-console'],
       // The 'react-native' preset is recommended (or use your own .babelrc)
       presets: ['react-native'],
     },

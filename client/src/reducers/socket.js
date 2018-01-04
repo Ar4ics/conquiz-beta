@@ -38,7 +38,7 @@ export default function socket(state = initialState, action) {
         {
           live: false,
           status: 'ошибка соединения',
-          failure: action.data
+          failure: action.data.type
         });
 
     case actions.GAME_ERROR:

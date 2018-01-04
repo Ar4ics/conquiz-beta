@@ -7,24 +7,38 @@ export const GAME_CREATED = 'GAME_CREATED';
 export const JOIN_GAME = 'JOIN_GAME';
 export const LEAVE_GAME = 'LEAVE_GAME';
 export const CURRENT_GAMES = 'CURRENT_GAMES';
+export const CONNECTED_CLIENTS = 'CONNECTED_CLIENTS';
 
 export function getPlayer() {
   return async (dispatch) => {
     try {
       let player = await AsyncStorage.getItem('player');
       if (player) {
-        console.log('local.user', player);
+        console.log('local.player', player);
         player = JSON.parse(player);
         dispatch({
           type: GET_PLAYER,
           player
         });
       } else {
-        console.log('player not found');
+        console.log('local.player not found');
       }
     } catch (error) {
       console.log('error retrieving data', error);
     }
+  }
+}
+
+export function getClients() {
+  return (dispatch) => {
+    dispatch(sendMessage({ type: CONNECTED_CLIENTS }));
+  }
+}
+
+export function connectedClients(data) {
+  return {
+    type: CONNECTED_CLIENTS,
+    data
   }
 }
 

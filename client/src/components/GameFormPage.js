@@ -15,6 +15,9 @@ export default class GameForm extends Component {
 
   _onSavePlayer() {
     let name = this.state.name.trim();
+    if (name === '') {
+      return;
+    }
     this.props.savePlayer({ name });
   }
 
@@ -42,42 +45,43 @@ export default class GameForm extends Component {
     } = this.props;
     return (
       <View>
-        <View style={styles.row}>
-          {player ? <Text>{player.name}</Text> :
-            <View>
-              <TextInput
-                placeholder='Ваше имя'
-                style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                onChangeText={(text) => this.setState({ name: text })}
-                value={this.state.name}
-              />
-              <Button
-                onPress={this._onSavePlayer}
-                title="Сохранить"
-              />
-            </View>
-          }
+        {player ?
+          <View style={styles.row}>
+            <Text>{player.name}</Text>
+          </View> :
+          <View style={styles.container}>
+            <TextInput
+              placeholder='Ваше имя'
+              style={styles.input}
+              onChangeText={(text) => this.setState({ name: text })}
+              value={this.state.name}
+            />
+            <Button
+              onPress={this._onSavePlayer}
+              title="Сохранить"
+            />
+          </View>
+        }
 
-        </View>
-        {!game &&
+        {!game && player &&
           <View style={styles.container}>
             <TextInput
               placeholder='Длина по x'
               keyboardType='numeric'
-              style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+              style={styles.input}
               onChangeText={(text) => this.setState({ x: text })}
               value={this.state.x}
             />
             <TextInput
               placeholder='Длина по y'
               keyboardType='numeric'
-              style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+              style={styles.input}
               onChangeText={(text) => this.setState({ y: text })}
               value={this.state.y} />
             <TextInput
               placeholder='Кол-во игроков'
               keyboardType='numeric'
-              style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+              style={styles.input}
               onChangeText={(text) => this.setState({ count: text })}
               value={this.state.count} />
             <Button
@@ -98,15 +102,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     alignItems: 'stretch',
+    marginTop: 5,
+    minWidth: 200,
 
   },
   row: {
-    margin: 5,
+    marginTop: 5,
     flexDirection: 'row',
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
 
   },
+
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1
+  }
 
 });

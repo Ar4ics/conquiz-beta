@@ -1,18 +1,18 @@
 import { AsyncStorage } from 'react-native';
-import { sendMessage, gameError } from './socket'
-import { leaveGame, CURRENT_GAMES } from './user'
+import { sendMessage } from './socket'
+import { leaveGame } from './user'
 
 export const BOX_CLICKED = 'BOX_CLICKED';
-export const GET_GAME = 'GET_GAME';
-export const GAME_NOT_FOUND = 'GAME_NOT_FOUND';
 export const NEW_QUESTION = 'NEW_QUESTION';
 export const USER_ANSWERED = 'USER_ANSWERED';
 export const ANSWER_RESULTS = 'ANSWER_RESULTS';
 export const CLEAR_RESULTS = 'CLEAR_RESULTS';
 export const COMMON_BOX_CLICKED = 'COMMON_BOX_CLICKED';
-export const GAME_OVER = 'GAME_OVER';
+export const GET_GAME = 'GET_GAME';
 export const GAME = 'GAME';
 export const GAME_FOUND = 'GAME_FOUND';
+export const GAME_NOT_FOUND = 'GAME_NOT_FOUND';
+export const GAME_OVER = 'GAME_OVER';
 
 export function boxClickSend(box) {
   return (dispatch) => {
@@ -66,9 +66,15 @@ export function gameFinished(data) {
 }
 
 export function exitGame() {
+  return (dispatch) => {
+    dispatch(leaveGame());
+    dispatch(removeGame());
+  }
+}
+
+export function removeGame() {
   return async (dispatch) => {
     try {
-      dispatch(leaveGame());
       await AsyncStorage.removeItem('game');
       dispatch({
         type: GAME_NOT_FOUND
@@ -78,6 +84,7 @@ export function exitGame() {
     }
   }
 }
+
 
 
 export function answerToQuestion(q) {
@@ -106,7 +113,7 @@ export function tryGetGame() {
         console.log('local.game', game);
         dispatch(getGame(JSON.parse(game)));
       } else {
-        console.log('game not found');
+        console.log('local.game not found');
         dispatch({
           type: GAME_NOT_FOUND
         });

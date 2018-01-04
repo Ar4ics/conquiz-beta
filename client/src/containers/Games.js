@@ -11,7 +11,9 @@ function mapStateToProps(state) {
   return {
     games: state.user.games,
     game: state.user.game,
-    player: state.user.player
+    player: state.user.player,
+    clients: state.user.clients
+
   };
 }
 

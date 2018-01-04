@@ -54,8 +54,15 @@ const socketMiddleware = (function () {
         //Dispatch an action that adds the received message to our state
         store.dispatch(game.gameFound(msg));
         break;
+      case game.GAME_NOT_FOUND:
+        //Dispatch an action that adds the received message to our state
+        store.dispatch(game.removeGame());
+        break;
       case user.CURRENT_GAMES:
         store.dispatch(user.currentGames(msg));
+        break;
+      case user.CONNECTED_CLIENTS:
+        store.dispatch(user.connectedClients(msg));
         break;
       case user.GAME_CREATED:
         store.dispatch(user.gameCreated(msg));

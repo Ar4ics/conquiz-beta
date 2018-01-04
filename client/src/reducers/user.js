@@ -3,7 +3,8 @@ import * as actions from "../actions/user";
 const initialState = {
   player: null,
   games: {},
-  game: null
+  game: null,
+  clients: 0
 };
 
 export default function user(state = initialState, action) {
@@ -33,6 +34,12 @@ export default function user(state = initialState, action) {
       return Object.assign({}, state,
         {
           games: action.data.games
+        });
+    case actions.CONNECTED_CLIENTS:
+      console.log(action);
+      return Object.assign({}, state,
+        {
+          clients: action.data.count
         });
     case actions.GAME_CREATED:
       console.log(action);
